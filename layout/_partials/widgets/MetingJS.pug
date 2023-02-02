@@ -1,23 +1,24 @@
-script.
-    var meting_api='https://meting.2333332.xyz/api?server=:server&type=:type&id=:id&auth=:auth&r=:r'
+if theme.meting.enable
+    script.
+        var meting_api= '!{ theme.meting.meting_api }'
 
-style.
-    .aplayer {
-        color: initial;
-        text-align: initial;
-    }
+    style.
+        .aplayer {
+            color: initial;
+            text-align: initial;
+        }
 
-link(
-    rel="stylesheet" 
-    href="https://unpkg.com/aplayer/dist/APlayer.min.css"
-)
+    link(
+        rel="stylesheet"
+        href="https://unpkg.com/aplayer/dist/APlayer.min.css"
+    )
 
-script(src="https://unpkg.com/aplayer/dist/APlayer.min.js")
-script(src="https://unpkg.com/meting@2/dist/Meting.min.js")
+    script(src="https://unpkg.com/aplayer/dist/APlayer.min.js")
+    script(src="https://unpkg.com/@xizeyoupan/meting@latest/dist/Meting.min.js")
 
-meting-js(
-    server="netease"
-    type="playlist"
-    id="3214713665"
-    fixed="true"
-)
+    meting-js(
+        server = theme.meting.server
+        type = theme.meting.type
+        id = theme.meting.id
+        fixed = `${theme.meting.fixed}`
+    )
