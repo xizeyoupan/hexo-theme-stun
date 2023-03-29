@@ -77,7 +77,8 @@ mixin postHeader(post)
               popoverPos: 'up',
               popoverText: __('popover.post.visit_num'),
               valueAttr: {
-                class: 'leancloud-visitors-count'
+                class: 'waline-pageview-count',
+                'data-path': url_for(post.path)
               }
             })
         

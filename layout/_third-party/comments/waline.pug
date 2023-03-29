@@ -10,6 +10,7 @@ link(rel="stylesheet" href="https://unpkg.2333332.xyz/@waline/client@v2/dist/wal
 
 script(type="module")&attributes(dataPjax).
   import { init } from 'https://unpkg.2333332.xyz/@waline/client@v2/dist/waline.mjs';
+  import { pageviewCount } from 'https://unpkg.2333332.xyz/@waline/client@v2/dist/pageview.mjs';
 
   function loadWaline () {
     var GUEST_INFO = ['nick', 'mail', 'link'];
@@ -19,12 +20,25 @@ script(type="module")&attributes(dataPjax).
       return GUEST_INFO.indexOf(item) > -1;
     });
 
+    pageviewCount({
+      serverURL: '!{ theme.waline.serverURL }',
+      path: window.location.pathname,
+
+      // optional, for custom selectors, defaults to `'.waline-pageview-count'`
+      // selector: 'waline-pageview-count',
+
+      // optional, whether to increase the number of visits when fetching, the default is `true`
+      // update: true,
+    });
+
+    if(!document.getElementById('waline-container')) return
+
     init({
       el: '#waline-container',
       serverURL: '!{ theme.waline.serverURL }',
       pageSize: '!{ theme.waline.pageSize }' || 10,
       lang: '!{ theme.waline.language }' || 'zh-CN',
-      pageview: location.hostname!=='localhost' && !{ theme.waline.visitor },
+      pageview: false,
       path: window.location.pathname,
       meta: guest_info,
       emoji: [
