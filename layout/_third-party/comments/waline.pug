@@ -1,13 +1,16 @@
 -
-  var waline_js = 'https://unpkg.com/@waline/client@1.6.0/dist/Waline.min.js';
+  var waline_js = 'https://unpkg.2333332.xyz/@waline/client@v2/dist/waline.mjs';
 
   if (theme.cdn.waline) {
     waline_js = theme.cdn.waline;
   }
 
-script(src=waline_js)
+//- script(src=waline_js)
+link(rel="stylesheet" href="https://unpkg.2333332.xyz/@waline/client@v2/dist/waline.css")
 
-script&attributes(dataPjax).
+script(type="module")&attributes(dataPjax).
+  import { init } from 'https://unpkg.2333332.xyz/@waline/client@v2/dist/waline.mjs';
+
   function loadWaline () {
     var GUEST_INFO = ['nick', 'mail', 'link'];
     var guest_info = '!{ theme.waline.meta }';
@@ -16,16 +19,24 @@ script&attributes(dataPjax).
       return GUEST_INFO.indexOf(item) > -1;
     });
 
-    Waline({
+    init({
       el: '#waline-container',
       serverURL: '!{ theme.waline.serverURL }',
-      placeholder: '!{ theme.waline.placeholder }',
       pageSize: '!{ theme.waline.pageSize }' || 10,
-      lang: '!{ theme.waline.language }' || 'zh-cn',
-      visitor: location.hostname!=='localhost' && !{ theme.waline.visitor },
-      avatar: '!{ theme.waline.avatar }',
+      lang: '!{ theme.waline.language }' || 'zh-CN',
+      pageview: location.hostname!=='localhost' && !{ theme.waline.visitor },
       path: window.location.pathname,
-      meta: guest_info
+      meta: guest_info,
+      emoji: [
+        '//unpkg.2333332.xyz/@waline/emojis@1.1.0/weibo',
+        '//unpkg.2333332.xyz/@waline/emojis@1.1.0/bilibili',
+        '//unpkg.2333332.xyz/@waline/emojis@1.1.0/alus',
+        '//unpkg.2333332.xyz/@waline/emojis@1.1.0/bmoji',
+        '//unpkg.2333332.xyz/@waline/emojis@1.1.0/qq',
+        '//unpkg.2333332.xyz/@waline/emojis@1.1.0/tieba'
+      ],
+      reaction: true,
+      locale: { placeholder: '!{ theme.waline.placeholder }' },
     });
   }
 
