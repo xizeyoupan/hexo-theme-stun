@@ -47,7 +47,6 @@ async function bangumi(args) {
             allData.push(each)
         }
     }
-    console.log(allData.length)
 
     const type_map = {
         1: "书籍",
@@ -70,18 +69,26 @@ async function bangumi(args) {
             "id": item.subject.id,
             "title": item.subject.name,
             "type": type_map[item.subject_type],
-            "cover": item.subject.images.common,
+            "cover": item.subject.images.large,
             "score": item.subject.score,
             "des": item.subject.short_summary,
             "state": collection_type_map[item.type],
             "collect": item.subject.collection_total,
             "totalCount": `共${item.subject.eps}话`,
             "myComment": item.comment || '',
-            "myStars": item.rate
+            "myStars": item.rate,
+            "release_date": item.subject.date,
+            "watch_date": item.updated_at,
         }
     })
 
-    console.log(allData)
+    for (let [index_i, i] of bangumis.data.entries()) {
+        for (let [index_j, j] of allData.entries()) {
+            if (i.title === j.title) {
+                allData[index_j] = Object.assign(j, i)
+            }
+        }
+    }
 
     return `<script> window.bangumis=${JSON.stringify(allData)} </script>`
 
