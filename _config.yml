@@ -1030,3 +1030,15 @@ cdn:
   # share_css: //unpkg.com/social-share.js@1.0.16/dist/css/share.min.css
   share_js:
   share_css:
+
+meting:
+  enable: false
+  type: playlist
+  server: 
+  id: false
+  fixed: true
+  order: random
+  meting_api: 
+  aplayer:
+    enable: false
+    url: /assets/site/playlist.json
