@@ -18,7 +18,7 @@ async function bangumi(args) {
         return
     }
 
-    const bangumis = JSON.parse(data)
+    let bangumis = JSON.parse(data)
     const { uid } = bangumis
     const BASEURL = 'https://api.bgm.tv'
     const options = {
@@ -68,6 +68,7 @@ async function bangumi(args) {
         return {
             "id": item.subject.id,
             "title": item.subject.name,
+            "name_cn": item.subject.name_cn || '',
             "type": type_map[item.subject_type],
             "cover": item.subject.images.large,
             "score": item.subject.score,
@@ -82,13 +83,34 @@ async function bangumi(args) {
         }
     })
 
-    for (let [index_i, i] of bangumis.data.entries()) {
-        for (let [index_j, j] of allData.entries()) {
-            if (i.title === j.title) {
-                allData[index_j] = Object.assign(j, i)
-            }
+    const local_bangumis_data = new Map()
+
+    for (let item of bangumis.data) {
+        local_bangumis_data.set(item.id, item)
+    }
+
+    for (let [index, item] of allData.entries()) {
+        const _local = local_bangumis_data.get(item.id)
+        if (_local) {
+            allData[index] = Object.assign(item, _local)
+        } else {
+            local_bangumis_data.set(item.id, { id: item.id, title: item.title, name_cn: item.name_cn, watch_date: '' })
         }
     }
+
+    bangumis.data = [...local_bangumis_data.values()]
+    bangumis.data = bangumis.data.sort((a, b) => {
+        if (a.watch_date < b.watch_date) return 1
+        if (a.watch_date > b.watch_date) return -1
+        return 0
+    })
+
+    await fs.writeFile(path, JSON.stringify(bangumis, null, 4))
+
+    allData = allData.map(item => {
+        item.title = item.name_cn || item.title
+        return item
+    })
 
     return `<script> window.bangumis=${JSON.stringify(allData)} </script>`
 
