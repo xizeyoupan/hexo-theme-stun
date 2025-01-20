@@ -84,9 +84,17 @@ async function bangumi(args) {
     })
 
     const local_bangumis_data = new Map()
+    const web_bangumis_data = new Map()
+
+    for (let item of allData) {
+        web_bangumis_data.set(item.id, item)
+    }
 
     for (let item of bangumis.data) {
         local_bangumis_data.set(item.id, item)
+        if (!web_bangumis_data.get(item.id)) {
+            web_bangumis_data.set(item.id, item)
+        }
     }
 
     for (let [index, item] of allData.entries()) {
@@ -106,6 +114,8 @@ async function bangumi(args) {
     })
 
     await fs.writeFile(path, JSON.stringify(bangumis, null, 4))
+
+    allData = [...web_bangumis_data.values()]
 
     allData = allData.map(item => {
         item.title = item.name_cn || item.title
